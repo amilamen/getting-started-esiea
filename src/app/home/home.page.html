@@ -7,14 +7,98 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <form [formGroup]="userForm">
+    <ion-item>
+      <ion-input label="Nom" formControlName="lastName"></ion-input>
+    </ion-item>
+    @if (userForm.get('lastName')?.errors && userForm.get('lastName')?.dirty) {
+      <span class="span-error">Ce champ est obligatoire.</span>
+    }
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+    <ion-item>
+      <ion-input label="Prénom" formControlName="firstName"></ion-input>
+    </ion-item>
+    @if (userForm.get('firstName')?.errors && userForm.get('firstName')?.dirty) {
+      <span class="span-error">Ce champ est obligatoire.</span>
+    }
+
+    <ion-item>
+      <ion-label>Date de naissance</ion-label>
+      <ion-datetime-button datetime="datetime"></ion-datetime-button>
+
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime id="datetime"
+                        formControlName="bornDate"
+                        presentation="date"
+                        cancelText="Annuler"
+                        doneText="OK"
+                        [showDefaultButtons]="true">
+          </ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
+    @if (userForm.get('bornDate')?.errors && userForm.get('bornDate')?.dirty) {
+      <span class="span-error">Ce champ est obligatoire.</span>
+    }
+
+    <ion-item>
+      <ion-select label="Sexe"
+                  formControlName="gender"
+                  placeholder="Sexe"
+                  cancelText="Annuler"
+                  okText="OK">
+        <ion-select-option value="homme">Homme</ion-select-option>
+        <ion-select-option value="femme">Femme</ion-select-option>
+      </ion-select>
+    </ion-item>
+    @if (userForm.get('gender')?.errors && userForm.get('gender')?.touched) {
+      <span class="span-error">Ce champ est obligatoire.</span>
+    }
+
+    <div class="div__button-save">
+      <ion-button size="default"
+                  (click)="onSave()"
+                  [disabled]="userForm.invalid">
+        Enregistrer
+      </ion-button>
+    </div>
+  </form>
+
+  @if (isSaved) {
+    <!--    @for (displayUser of displayUsers; track $index) {-->
+      <!--      <ion-card>-->
+      <!--        <ion-card-header>-->
+      <!--          <ion-card-title>{{ displayUser.lastName }}</ion-card-title>-->
+      <!--          <ion-card-subtitle>{{ displayUser.firstName }}</ion-card-subtitle>-->
+      <!--        </ion-card-header>-->
+
+      <!--        <ion-card-content>-->
+      <!--          <ul>-->
+      <!--            <li>Date de naissance : {{ displayUser.bornDate | date:'dd/MM/yyyy' }}</li>-->
+      <!--            <li>Sexe : {{ displayUser.gender }}</li>-->
+      <!--          </ul>-->
+
+      <!--          <div class="div__button-delete">-->
+      <!--            <ion-button size="default" color="danger" (click)="onDelete($index)">Supprimer</ion-button>-->
+      <!--          </div>-->
+      <!--        </ion-card-content>-->
+      <!--      </ion-card>-->
+      <!--    }-->
+
+    <ion-list>
+      @for (displayUser of displayUsers; track $index) {
+        <ion-item>
+          <ion-label>
+            <p>Firstname : {{ displayUser.firstName }}</p>
+            <p>Lastname : {{ displayUser.lastName }}</p>
+            <p>Date de naissance : {{ displayUser.bornDate | date:'dd/MM/yyyy' }}</p>
+            <p>Sexe : {{ displayUser.gender }}</p>
+          </ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  }
 </ion-content>
+
+
